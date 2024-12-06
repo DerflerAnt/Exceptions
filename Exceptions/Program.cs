@@ -7,7 +7,7 @@ class Program
 {
     static void Main()
     {
-        
+        /*
         // Використання фіксованого seed для генератора випадкових чисел
         Random random = new Random(1234);
 
@@ -27,7 +27,7 @@ class Program
         }
 
         Console.WriteLine("Усі файли створені.");
-        
+        */
         // Списки для збереження результатів обробки
         List<int> validProducts = new List<int>(); // Список коректних добутків
         List<string> noFiles = new List<string>(); // Список відсутніх файлів
