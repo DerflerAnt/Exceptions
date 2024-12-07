@@ -82,9 +82,35 @@ class Program
                 }
             }
             // Запис результатів у відповідні файли
-            if (noFiles.Count > 0) File.WriteAllLines("no_file.txt", noFiles);// Файли, які не знайдено
-            if (badDataFiles.Count > 0) File.WriteAllLines("bad_data.txt", badDataFiles); // Файли з некоректними даними
-            if (overflowFiles.Count > 0) File.WriteAllLines("overflow.txt", overflowFiles); // Файли з переповненням
+            if (noFiles.Count > 0)
+            {
+                Console.WriteLine("Файли, яких не існує:");
+                noFiles.ForEach(Console.WriteLine);
+            }
+            else
+            {
+                Console.WriteLine("Усі файли знайдено.");
+            }
+            // Файли, які не знайдено
+            if (badDataFiles.Count > 0)
+            {
+                Console.WriteLine("Файли з некоректними даними:");
+                badDataFiles.ForEach(Console.WriteLine);
+            }
+            else
+            {
+                Console.WriteLine("Некоректних даних не знайдено.");
+            } // Файли з некоректними даними
+            if (overflowFiles.Count > 0)
+            {
+                Console.WriteLine("Файли з переповненням при множенні:");
+                overflowFiles.ForEach(Console.WriteLine);
+            }
+            else
+            {
+                Console.WriteLine("Переповнень не виявлено.");
+            }
+            // Файли з переповненням
             // Якщо є коректні добутки, обчислюємо їх середнє арифметичне
             if (validProducts.Count > 0)
             {
