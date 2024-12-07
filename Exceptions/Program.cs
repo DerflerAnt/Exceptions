@@ -116,7 +116,7 @@ class Program
             {
                 // Обчислення середнього
                 double average = validProducts.Average();
-                Console.WriteLine($"Середнє арифметичне: {average}");
+                Console.WriteLine($"Середнє арифметичне коректних добутків: {average}");
             }
             else
             {
