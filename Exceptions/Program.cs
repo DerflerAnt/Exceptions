@@ -7,6 +7,7 @@ class Program
 {
     static void Main()
     {
+       
         /*
         // Використання фіксованого seed для генератора випадкових чисел
         Random random = new Random(1234);
@@ -36,98 +37,105 @@ class Program
 
         try
         {
-            // Перебір файлів від 10.txt до 29.txt (20 файлів)
-            foreach (int i in Enumerable.Range(10, 20))// Генерує числа від 10 до 29
+            foreach (int i in Enumerable.Range(10, 20)) // Генеруємо числа від 10 до 29
             {
-                string fileName = $"{i}.txt";// Формування назви файлу
-                if (!File.Exists(fileName))
-                {
-                    // Якщо файл не існує, додаємо його до списку noFiles і пропускаємо обробку
-                    noFiles.Add(fileName);
-                    continue;
-                }
+                string fileName = $"{i}.txt"; // Формування назви файлу
+
                 try
                 {
-                    // Зчитування рядків із файлу
-                    string[] lines = File.ReadAllLines(fileName);
-                    // Парсинг чисел із файлу
-                    int firstNumber = int.Parse(lines[0]);
-                    int secondNumber = int.Parse(lines[1]);
-                    // Обчислення добутку з перевіркою на переповнення
-                    checked
+                    string[] lines = File.ReadAllLines(fileName); // Спроба читання файлу
+
+                    try
                     {
-                        int product = firstNumber * secondNumber;
-                        validProducts.Add(product);// Додавання результату до списку
+                        int firstNumber = int.Parse(lines[0]);
+                        int secondNumber = int.Parse(lines[1]);
+
+                        try
+                        {
+                            checked // Перевірка на переповнення
+                            {
+                                int product = firstNumber * secondNumber;
+                                validProducts.Add(product);
+                            }
+                        }
+                        catch (OverflowException)
+                        {
+                            overflowFiles.Add(fileName);
+                        }
+                    }
+                    catch (FormatException)
+                    {
+                        badDataFiles.Add(fileName);
                     }
                 }
                 catch (FileNotFoundException)
                 {
-                    // Якщо файл не знайдено, додаємо його до списку noFiles
                     noFiles.Add(fileName);
                 }
-                catch (FormatException)
+            }
+
+            try
+            {
+                File.WriteAllLines("no_file.txt", noFiles);
+                File.WriteAllLines("bad_data.txt", badDataFiles);
+                File.WriteAllLines("overflow.txt", overflowFiles);
+            }
+            catch (IOException ioEx)
+            {
+                Console.WriteLine($"Помилка запису файлу: {ioEx.Message}");
+                throw;
+            }
+
+            try
+            {
+                if (noFiles.Count > 0)
                 {
-                    // Якщо дані у файлі некоректні (не числа), додаємо до badDataFiles
-                    badDataFiles.Add(fileName);
+                    Console.WriteLine("Файли, яких не існує:");
+                    noFiles.ForEach(Console.WriteLine);
                 }
-                catch (OverflowException)
+                else
                 {
-                    // Якщо відбулося переповнення при множенні, додаємо до overflowFiles
-                    overflowFiles.Add(fileName);
+                    Console.WriteLine("Усі файли знайдено.");
                 }
-                catch (Exception ex)
+
+                if (badDataFiles.Count > 0)
                 {
-                    // Обробка будь-яких інших неочікуваних винятків
-                    Console.WriteLine($"Unexpected error in {fileName}: {ex.Message}");
+                    Console.WriteLine("Файли з некоректними даними:");
+                    badDataFiles.ForEach(Console.WriteLine);
+                }
+                else
+                {
+                    Console.WriteLine("Некоректних даних не знайдено.");
+                }
+
+                if (overflowFiles.Count > 0)
+                {
+                    Console.WriteLine("Файли з переповненням при множенні:");
+                    overflowFiles.ForEach(Console.WriteLine);
+                }
+                else
+                {
+                    Console.WriteLine("Переповнень не виявлено.");
+                }
+
+                if (validProducts.Count > 0)
+                {
+                    double average = validProducts.Average();
+                    Console.WriteLine($"Середнє арифметичне коректних добутків: {average}");
+                }
+                else
+                {
+                    Console.WriteLine("Жодного коректного добутку не знайдено.");
                 }
             }
-            // Запис результатів у відповідні файли
-            if (noFiles.Count > 0)
+            catch (Exception ex)
             {
-                Console.WriteLine("Файли, яких не існує:");
-                noFiles.ForEach(Console.WriteLine);
-            }
-            else
-            {
-                Console.WriteLine("Усі файли знайдено.");
-            }
-            // Файли, які не знайдено
-            if (badDataFiles.Count > 0)
-            {
-                Console.WriteLine("Файли з некоректними даними:");
-                badDataFiles.ForEach(Console.WriteLine);
-            }
-            else
-            {
-                Console.WriteLine("Некоректних даних не знайдено.");
-            } // Файли з некоректними даними
-            if (overflowFiles.Count > 0)
-            {
-                Console.WriteLine("Файли з переповненням при множенні:");
-                overflowFiles.ForEach(Console.WriteLine);
-            }
-            else
-            {
-                Console.WriteLine("Переповнень не виявлено.");
-            }
-            // Файли з переповненням
-            // Якщо є коректні добутки, обчислюємо їх середнє арифметичне
-            if (validProducts.Count > 0)
-            {
-                // Обчислення середнього
-                double average = validProducts.Average();
-                Console.WriteLine($"Середнє арифметичне коректних добутків: {average}");
-            }
-            else
-            {
-                // Якщо немає коректних добутків
-                Console.WriteLine("Жодного коректного добутку не знайдено.");
+                Console.WriteLine($"Непередбачена помилка: {ex.Message}");
             }
         }
-        catch (IOException ioEx)
+        catch (Exception ex)
         {
-            // Обробка помилок при записі результатів у файли
-            Console.WriteLine($"Помилка створення/запису файлу: {ioEx.Message}");
+            Console.WriteLine($"Критична помилка виконання програми: {ex.Message}");
         }
     }
 }
