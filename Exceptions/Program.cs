@@ -40,6 +40,12 @@ class Program
             foreach (int i in Enumerable.Range(10, 20))// Генерує числа від 10 до 29
             {
                 string fileName = $"{i}.txt";// Формування назви файлу
+                if (!File.Exists(fileName))
+                {
+                    // Якщо файл не існує, додаємо його до списку noFiles і пропускаємо обробку
+                    noFiles.Add(fileName);
+                    continue;
+                }
                 try
                 {
                     // Зчитування рядків із файлу
