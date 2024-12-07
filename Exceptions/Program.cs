@@ -88,35 +88,14 @@ class Program
 
             try
             {
-                if (noFiles.Count > 0)
-                {
-                    Console.WriteLine("Файли, яких не існує:");
-                    noFiles.ForEach(Console.WriteLine);
-                }
-                else
-                {
-                    Console.WriteLine("Усі файли знайдено.");
-                }
+                Console.WriteLine(noFiles.Count > 0 ? "Файли, яких не існує:" : "Усі файли знайдено.");
+                noFiles.ForEach(Console.WriteLine);
 
-                if (badDataFiles.Count > 0)
-                {
-                    Console.WriteLine("Файли з некоректними даними:");
-                    badDataFiles.ForEach(Console.WriteLine);
-                }
-                else
-                {
-                    Console.WriteLine("Некоректних даних не знайдено.");
-                }
+                Console.WriteLine(badDataFiles.Count > 0 ? "Файли з некоректними даними:" : "Некоректних даних не знайдено.");
+                badDataFiles.ForEach(Console.WriteLine);
 
-                if (overflowFiles.Count > 0)
-                {
-                    Console.WriteLine("Файли з переповненням при множенні:");
-                    overflowFiles.ForEach(Console.WriteLine);
-                }
-                else
-                {
-                    Console.WriteLine("Переповнень не виявлено.");
-                }
+                Console.WriteLine(overflowFiles.Count > 0 ? "Файли з переповненням при множенні:" : "Переповнень не виявлено.");
+                overflowFiles.ForEach(Console.WriteLine);
 
                 if (validProducts.Count > 0)
                 {
